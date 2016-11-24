@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 /**
  *
  */
-public class ParamsOneNotNullValidator extends ParamsAbstractValidator implements ConstraintValidator<ParamsListNotNull, Object> {
+public class ParamsListNotNullValidator extends ParamsAbstractValidator implements ConstraintValidator<ParamsListNotNull, Object> {
     private ParamsListNotNull annotation;
 
     @Override

@@ -16,6 +16,8 @@
 */
 package com.alibaba.dubbo.validation.annotations.method;
 
+import com.alibaba.dubbo.validation.support.methodvalidation.validators.ParamsListNotNullValidator;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
@@ -35,7 +37,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = { })
+@Constraint(validatedBy = {ParamsListNotNullValidator.class})
 public @interface ParamsListNotNull {
 
     /**

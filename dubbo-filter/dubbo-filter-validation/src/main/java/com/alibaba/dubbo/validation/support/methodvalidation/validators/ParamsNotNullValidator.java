@@ -30,7 +30,7 @@ public class ParamsNotNullValidator extends ParamsAbstractValidator implements C
             try{
                 Object fieldValue = getFieldValue(valueClass, fieldName, value);
 
-                if (fieldValue == null || "".equals(fieldValue.toString())){
+                if (fieldValue == null){
                     return false;
                 }
             }catch (Exception e){
