@@ -13,10 +13,6 @@ import java.lang.reflect.Method;
  */
 public class AnnotationUtils {
 
-    @ParamsNotNull(field = {"abc"}, message = "123")
-    public void abc(String abc) {
-    }
-
     /**
      * 获取annotation某一个member的值
      * @param annotation 注解

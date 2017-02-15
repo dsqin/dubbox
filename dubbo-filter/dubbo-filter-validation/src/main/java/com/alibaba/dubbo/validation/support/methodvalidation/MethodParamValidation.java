@@ -13,11 +13,8 @@ import org.slf4j.LoggerFactory;
  */
 public class MethodParamValidation implements Validation {
 
-    private static final Logger logger = LoggerFactory.getLogger(MethodParamValidation.class);
-
     @Override
     public Validator getValidator(URL url) {
-        logger.info("****" + url);
         return new MethodParamValidator(url);
     }
 }

@@ -150,14 +150,16 @@ public class AccessLogFilter implements Filter {
     }
 
     public Result invoke(Invoker<?> invoker, Invocation inv) throws RpcException {
+        StringBuilder sn = new StringBuilder();
+        String accesslog = invoker.getUrl().getParameter(Constants.ACCESS_LOG_KEY);
         try {
-            String accesslog = invoker.getUrl().getParameter(Constants.ACCESS_LOG_KEY);
+
             if (ConfigUtils.isNotEmpty(accesslog)) {
                 RpcContext context = RpcContext.getContext();
                 String serviceName = invoker.getInterface().getName();
                 String version = invoker.getUrl().getParameter(Constants.VERSION_KEY);
                 String group = invoker.getUrl().getParameter(Constants.GROUP_KEY);
-                StringBuilder sn = new StringBuilder();
+
                 sn.append("[").append(new SimpleDateFormat(MESSAGE_DATE_FORMAT).format(new Date())).append("] ").append(context.getRemoteHost()).append(":").append(context.getRemotePort())
                 .append(" -> ").append(context.getLocalHost()).append(":").append(context.getLocalPort())
                 .append(" - ");
@@ -188,17 +190,29 @@ public class AccessLogFilter implements Filter {
                 if (args != null && args.length > 0) {
                     sn.append(JSON.json(args));
                 }
-                String msg = sn.toString();
-                if (ConfigUtils.isDefault(accesslog)) {
-                    LoggerFactory.getLogger(ACCESS_LOG_KEY + "." + invoker.getInterface().getName()).info(msg);
-                } else {
-                    log(accesslog, msg);
-                }
+
             }
         } catch (Throwable t) {
             logger.warn("Exception in AcessLogFilter of service(" + invoker + " -> " + inv + ")", t);
         }
-        return invoker.invoke(inv);
+        Result result = invoker.invoke(inv);
+
+        try {
+            sn.append(", result:");
+            sn.append(result);
+
+            String msg = sn.toString();
+            if (ConfigUtils.isDefault(accesslog)) {
+                LoggerFactory.getLogger(ACCESS_LOG_KEY + "." + invoker.getInterface().getName()).info(msg);
+            } else {
+                log(accesslog, msg);
+            }
+
+        } catch (Throwable t) {
+            logger.warn("Exception in ResultLogFilter of service(" + invoker + " -> " + inv + ")", t);
+        }
+
+        return result;
     }
 
 }

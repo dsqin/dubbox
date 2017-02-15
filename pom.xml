@@ -106,8 +106,8 @@
 		<hessian_version>4.0.7</hessian_version>
 		<servlet_version>3.1.0</servlet_version>
 		<jetty_version>6.1.26</jetty_version>
-		<validation_version>1.0.0.GA</validation_version>
-		<hibernate_validator_version>4.2.0.Final</hibernate_validator_version>
+		<validation_version>1.1.0.Final</validation_version>
+		<hibernate_validator_version>5.3.3.Final</hibernate_validator_version>
 		<jcache_version>0.4</jcache_version>
 		<sca_version>2.0-M5.1</sca_version>
 		<guice_version>3.0</guice_version>

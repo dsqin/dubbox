@@ -4,7 +4,9 @@ import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.utils.ReflectUtils;
 import com.alibaba.dubbo.rpc.RpcException;
 import com.alibaba.dubbo.validation.Validator;
+import com.alibaba.dubbo.validation.support.methodvalidation.exception.ParamFieldValidationException;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,8 @@ public class MethodParamValidator implements Validator {
     private static final Logger logger = LoggerFactory.getLogger(MethodParamValidator.class);
 
     private static final String ANNOTATION_MEMBER_MESSAGE = "message";
+
+    private static final String ANNOTATION_MEMBER_CODE = "code";
 
     private final Class<?> clazz;
 
@@ -78,12 +82,17 @@ public class MethodParamValidator implements Validator {
                 continue;
             }
 
-            Object message = AnnotationUtils.getAnnotationMemberValue(annotation, ANNOTATION_MEMBER_MESSAGE);
+            Object errorMessage = AnnotationUtils.getAnnotationMemberValue(annotation, ANNOTATION_MEMBER_MESSAGE);
+            Object errorCode = AnnotationUtils.getAnnotationMemberValue(annotation, ANNOTATION_MEMBER_CODE);
+
+            String message =  null == errorMessage ? "" : errorMessage.toString();
+            String code = null == errorCode ? "" : errorCode.toString();
 
             if (null != validator) {
                 validator.initialize(annotation);
                 if (!validator.isValid(arguments[0], null)) {
-                    throw new RpcException(RpcException.INVALID_PARAM, null == message ? "" : message.toString());
+                    throw new RpcException(RpcException.INVALID_PARAM, message,
+                            new ParamFieldValidationException(code, message));
                 }
             }
         }
